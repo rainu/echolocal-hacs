@@ -95,6 +95,11 @@ const LAYOUTS: Partial<Record<Kind, Group[]>> = {
   ],
 
   device: [
+    { title: "Dashboard clock", rows: [
+      ["clock_date", "Show date"],
+      ["clock_date_format", "Date format"],
+      ["clock_date_pattern", "Custom date pattern"],
+    ] },
     {
       title: null,
       rows: [
@@ -298,7 +303,7 @@ export function settings(state: Satellite): Section[] {
   return withRest(
     LAYOUTS.device ?? [],
     state.entities.filter(
-      (e) => e.device_id === state.device.id && SETTABLE.has(e.entity_id.split(".")[0])
+      (e) => (e.device_id === state.device.id || ["clock_date", "clock_date_format", "clock_date_pattern"].includes(e.name)) && SETTABLE.has(e.entity_id.split(".")[0])
     ),
     new Set()
   );
