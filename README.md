@@ -84,3 +84,16 @@ MIT.
 
 [hacs]: https://github.com/hacs/integration
 [hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5.svg
+
+### Dashboard date formats
+
+With compatible EchoLocal firmware, device settings include a **Dashboard clock**
+section: **Show date**, **Date format**, and **Custom date pattern**.
+Select a preset or choose **Custom** and enter e.g. `dd.MM.yyyy`.
+Date visibility remains independent. The device applies the format to its dashboard
+and idle clock; this companion edits the same ESPHome entities, not a second copy.
+
+Patterns use case-sensitive calendar tokens: `yyyy yy MMMM MMM MM M dd d EEEE EEE`.
+Month and weekday names follow the device language. Single quotes delimit literal
+text; doubled quotes insert an apostrophe. Unsupported tokens are rejected.
+Older firmware simply does not advertise the new controls.

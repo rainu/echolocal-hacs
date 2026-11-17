@@ -7,7 +7,9 @@
   "scripts": {
     "build": "node build.mjs",
     "watch": "node build.mjs --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node tests/date-settings.mjs",
+    "test:browser": "node tests/date-dialog.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",

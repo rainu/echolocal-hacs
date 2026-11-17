@@ -262,6 +262,8 @@ export class EchoLocalDialog extends LitElement {
         return this.slider(row);
       case "select":
         return this.options(row);
+      case "text":
+        return this.textInput(row);
       case "button":
         return this.press(row);
       case "update":
@@ -302,6 +304,32 @@ export class EchoLocalDialog extends LitElement {
             </ha-button>
           </div>`
         : undefined,
+    });
+  }
+
+  private textInput(row: Row) {
+    const state = this.hass.states[row.entityId];
+    const datePattern = row.name === "clock_date_pattern";
+    return this.tile(row, false, {
+      under: html`<input
+        aria-label=${row.label}
+        .value=${["unknown", "unavailable"].includes(state.state) ? "" : state.state}
+        placeholder=${datePattern ? "dd.MM.yyyy" : ""}
+        maxlength=${Number(state.attributes.max ?? 128)}
+        ?disabled=${state.state === "unavailable"}
+        @change=${async (event: Event) => {
+          const input = event.target as HTMLInputElement;
+          try {
+            await this.hass.callService("text", "set_value", {
+              entity_id: row.entityId, value: input.value,
+            });
+            input.setCustomValidity("");
+          } catch {
+            input.setCustomValidity("Could not save. Check the pattern and device connection.");
+            input.reportValidity();
+          }
+        }}
+      />${datePattern ? html`<div class="note">Choose Custom to apply this pattern. Use yyyy, yy, MMMM, MMM, MM, M, dd, d, EEEE or EEE; quote literal text with single quotes. Show date stays independent.</div>` : nothing}`,
     });
   }
 
