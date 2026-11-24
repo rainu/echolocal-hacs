@@ -2,10 +2,11 @@
 //
 // Roles come from the registry names in keys.ts, which echod owns. Nothing here reads an entity id.
 
+import { isBoard } from "./boards";
 import { index, tag, type Index, type Tagged } from "./keys";
 import type { HassDevice, HomeAssistant } from "./types";
 
-export const MANUFACTURER = "EchoLocal";
+export const MANUFACTURERS = ["EchoLocal", "LANovo"];
 
 const ESPHOME = "esphome";
 
@@ -20,6 +21,7 @@ export interface Satellite {
   // Every entity under echod's own name for it, built once, so anything looking for one does a get.
   by: Index;
 
+  board: string;
   satellite?: string;
   player?: string;
   update?: string;
@@ -58,7 +60,7 @@ export function isSatellite(
   hass: HomeAssistant | undefined,
   deviceId: string,
 ): boolean {
-  if (hass?.devices?.[deviceId]?.manufacturer !== MANUFACTURER) return false;
+  if (!hass || !MANUFACTURERS.includes(hass.devices?.[deviceId]?.manufacturer ?? "")) return false;
   return partsOf(hass, deviceId).some(esphomeMade);
 }
 
@@ -91,16 +93,19 @@ export function resolve(
     if (at >= 0 && at < SEGMENTS) segments[at] = light.entity_id;
   }
 
+  const board = one("hardware_board");
+
   return {
     device,
     entities,
     by,
+    board: isBoard(device.model) ? device.model : (board && hass.states?.[board]?.state) || "",
     satellite: one("assist_satellite"),
     player: one("speaker"),
     update: one("firmware"),
     ring: one("ring"),
     segments,
-    mute: one("mic_mute"),
+    mute: one("mic_mute") ?? one("microphone_muted"),
   };
 }
 

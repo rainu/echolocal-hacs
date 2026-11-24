@@ -15,6 +15,7 @@ import "./appearance";
 import { helpFor, helpForWidget } from "./help";
 import type { Widget } from "./layout";
 import "./history";
+import "./logs";
 import "./playback";
 import type { HomeAssistant, Row, Section } from "./types";
 
@@ -120,6 +121,12 @@ export class EchoLocalDialog extends LitElement {
           .muted=${this.muted}
         ></echolocal-array>`;
 
+      case "logs":
+        return html`<echolocal-logs
+          .hass=${this.hass}
+          .device=${this.device}
+        ></echolocal-logs>`;
+
       case "history":
         return html`<echolocal-history
           class="hero"
@@ -151,7 +158,21 @@ export class EchoLocalDialog extends LitElement {
 
       case "mute":
         return this.crownMute(roles.mute, roles.lamp);
+
+      case "camera":
+        return this.crownCamera(roles.camera);
     }
+  }
+
+  private crownCamera(camera: string): TemplateResult {
+    const picture = this.hass.states[camera]?.attributes.entity_picture;
+    if (typeof picture !== "string") return html``;
+
+    const fresh = `${picture}${picture.includes("?") ? "&" : "?"}t=${Math.floor(Date.now() / 10_000)}`;
+
+    return html`<button class="crown picture" @click=${() => this.moreInfo(camera)}>
+      <img src=${fresh} alt="Camera" />
+    </button>`;
   }
 
   // Play and pause in the header, since a player that is playing is the first thing about it.
@@ -471,9 +492,16 @@ export class EchoLocalDialog extends LitElement {
       });
     }
 
+    const shown =
+      state.attributes.mode === "password" && state.state ? "••••••" : state.state;
+
     return this.tile(row, false, {
-      trail: html`<button class="reading" @click=${() => this.moreInfo(row.entityId)}>
-          ${state.state}
+      trail: html`<button
+          class=${shown.length > 12 ? "reading version" : "reading"}
+          title=${shown}
+          @click=${() => this.moreInfo(row.entityId)}
+        >
+          ${shown}
         </button>
         ${unit ? html`<span class="unit">${unit}</span>` : nothing}`,
     });

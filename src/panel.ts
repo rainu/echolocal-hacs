@@ -12,6 +12,10 @@ import "./tabs/groups";
 import "./tabs/activity";
 import "./tabs/health";
 import "./tabs/words";
+import "./tabs/tones";
+import "./tabs/actions";
+import "./tabs/fleet";
+import "./tabs/voices";
 
 @customElement("echolocal-panel")
 export class EchoLocalPanel extends LitElement {
@@ -51,6 +55,7 @@ export class EchoLocalPanel extends LitElement {
 
     return html`
       <header>
+        <ha-menu-button .hass=${this.hass} .narrow=${this.narrow}></ha-menu-button>
         <div class="bar">${shown.map((tab) => this.button(tab, tab === here))}</div>
       </header>
       <div class="page">${here ? this.body(here) : nothing}</div>

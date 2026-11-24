@@ -15,6 +15,8 @@ export const TURN_EVENT = "esphome.echolocal_turn";
 // esphome.<device>_<action>.
 export const AUDIO_ACTION = "turn_audio";
 export const RECORDINGS_ACTION = "recordings";
+export const LOGS_ACTION = "logs";
+export const TONE_WRITE_ACTION = "tone_write";
 
 export interface Turn {
   // Bumped when a field changes meaning. A version we do not know is ignored rather than guessed at.
@@ -33,6 +35,10 @@ export interface Turn {
   reply?: string;
 
   outcome: "completed" | "cancelled" | "timeout" | "failed";
+
+  speaker?: string;
+  speaker_person?: string;
+  speaker_score?: number;
 
   // Durations rather than clock times: the device may have no set clock, and a wall clock nobody set is
   // worse than none. Milliseconds.
@@ -56,6 +62,15 @@ export interface Audio {
   pages: number;
   mime: string;
   data: string;
+}
+
+// The reply to logs(page). pages is the whole count, so a caller knows when to stop without a second
+// round trip. What the device holds outgrows one message, which is why it is paged at all.
+export interface Logs {
+  version: 1;
+  page: number;
+  pages: number;
+  lines: string[];
 }
 
 export interface Phase {
@@ -98,8 +113,16 @@ export function fromEvent(data: unknown): Turn | null {
 
   if (raw.heard) turn.heard = raw.heard;
   if (raw.reply) turn.reply = raw.reply;
+  if (raw.speaker) turn.speaker = raw.speaker;
+  if (raw.speaker_person) turn.speaker_person = raw.speaker_person;
 
-  for (const key of ["listen_ms", "think_ms", "speak_ms", "audio_seconds"] as const) {
+  for (const key of [
+    "listen_ms",
+    "think_ms",
+    "speak_ms",
+    "audio_seconds",
+    "speaker_score",
+  ] as const) {
     const value = number(raw[key]);
     if (value !== undefined) turn[key] = value;
   }
