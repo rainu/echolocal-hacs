@@ -97,3 +97,9 @@ Patterns use case-sensitive calendar tokens: `yyyy yy MMMM MMM MM M dd d EEEE EE
 Month and weekday names follow the device language. Single quotes delimit literal
 text; doubled quotes insert an apostrophe. Unsupported tokens are rejected.
 Older firmware simply does not advertise the new controls.
+
+## Talk automations
+
+[Start/stop Talk and discover OpenClaw sessions](docs/talk-actions.md) with
+optional per-conversation routing and startup prompts. Requires a device build
+that advertises the answering Talk actions.

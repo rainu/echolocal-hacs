@@ -1,0 +1,44 @@
+start_talk:
+  name: Start Talk
+  description: Start a voice conversation. Omitted or empty values independently use assistant 1 defaults, without changing settings.
+  fields:
+    device_id:
+      name: EchoLocal device
+      required: true
+      selector:
+        device:
+          integration: esphome
+          manufacturer: EchoLocal
+    session_id:
+      name: OpenClaw session ID
+      description: A routing ID returned by Get OpenClaw sessions. Omit to use the device default.
+      selector:
+        text:
+    startup_prompt:
+      name: Startup prompt
+      description: Used only for this conversation. Omit to use the device default.
+      selector:
+        text:
+          multiline: true
+stop_talk:
+  name: Stop Talk
+  description: Stop only the active voice conversation. Safe to repeat; does not stop text tasks or delete the session.
+  fields:
+    device_id:
+      name: EchoLocal device
+      required: true
+      selector:
+        device:
+          integration: esphome
+          manufacturer: EchoLocal
+get_openclaw_sessions:
+  name: Get OpenClaw sessions
+  description: Return available sessions as stable routing IDs and human-readable names. A disconnected device or gateway fails explicitly.
+  fields:
+    device_id:
+      name: EchoLocal device
+      required: true
+      selector:
+        device:
+          integration: esphome
+          manufacturer: EchoLocal
