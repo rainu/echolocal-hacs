@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import importlib
 import json
 import sys
@@ -10,6 +11,7 @@ from pathlib import Path
 from types import ModuleType, SimpleNamespace
 from unittest.mock import AsyncMock, Mock, patch
 
+import yaml
 from aioesphomeapi import APIConnectionError
 from homeassistant.core import Context
 from homeassistant.exceptions import HomeAssistantError, Unauthorized
@@ -164,6 +166,69 @@ class TalkActionsTest(unittest.IsolatedAsyncioTestCase):
         self.hass.auth.async_get_user.return_value = None
         with self.assertRaises(Unauthorized):
             await self.invoke()
+
+    def test_existing_v020_service_catalog_is_preserved(self):
+        root = Path(__file__).parents[1] / "custom_components" / "echolocal"
+        names = set(yaml.safe_load((root / "services.yaml").read_text()))
+        existing = {
+            "assign_tone",
+            "unassign_tone",
+            "dashboards",
+            "dashboard_token",
+            "fetch",
+            "ping",
+            "voices",
+            "music_queue",
+            "music_favorite",
+            "music_play",
+            "music_browse",
+            "music_library",
+            "music_search",
+            "music_players",
+            "music_recent",
+            "music_recommendations",
+            "camera_webrtc",
+            "camera_webrtc_close",
+            "call_answer",
+            "call_end",
+        }
+        self.assertTrue(existing <= names)
+        self.assertTrue(set(talk._ACTIONS) <= names)
+
+    def test_existing_v020_startup_handlers_are_preserved(self):
+        root = Path(__file__).parents[1] / "custom_components" / "echolocal"
+        tree = ast.parse((root / "__init__.py").read_text())
+        setup = next(
+            node
+            for node in tree.body
+            if isinstance(node, ast.AsyncFunctionDef) and node.name == "async_setup_entry"
+        )
+        calls = {
+            node.func.value.id
+            for node in ast.walk(setup)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and node.func.attr == "async_setup"
+            and isinstance(node.func.value, ast.Name)
+        }
+        self.assertTrue(
+            {
+                "wakewords",
+                "tones",
+                "triggers",
+                "fleet",
+                "voices",
+                "entities",
+                "ping",
+                "webrtc",
+                "call",
+                "dashboard",
+                "fetch",
+                "music",
+                "talk",
+            }
+            <= calls
+        )
 
     async def test_system_automations_and_admin_remain_supported(self):
         self.entries_patch.stop()

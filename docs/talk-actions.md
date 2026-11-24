@@ -98,3 +98,11 @@ The HACS `tests/test_talk.py` suite runs in a Home Assistant Python environment
 and checks optional schemas, response support, device routing/permissions,
 failure propagation, disconnections, malformed replies and absence of retries.
 Mocked tests do not establish real-device or spoken-conversation behavior.
+
+## Existing integration compatibility
+
+This implementation is integrated with the 0.0.20 backend baseline. Existing
+services and their startup handlers are preserved alongside the three Talk
+actions; the fork's existing date controls are retained in the rebuilt frontend.
+Loading Python backend changes requires a Home Assistant restart. The native
+ESPHome actions are available independently of that HACS restart.
