@@ -18,8 +18,170 @@
       "init": {
         "title": "EchoLocal",
         "data": {
-          "sidebar": "Show the EchoLocal dashboard in the sidebar"
+          "sidebar": "Show the EchoLocal dashboard in the sidebar",
+          "panel_users": "Users device screens may show dashboards as"
         }
+      }
+    }
+  },
+  "services": {
+    "dashboards": {
+      "name": "List dashboards",
+      "description": "The users a device's screen may sign in as, and the dashboards and views it can show.",
+      "fields": {
+        "node": { "name": "Device", "description": "The device's ESPHome name." }
+      }
+    },
+    "dashboard_token": {
+      "name": "Dashboard sign-in",
+      "description": "A short-lived token and Home Assistant's address for a device's screen.",
+      "fields": {
+        "node": { "name": "Device", "description": "The device's ESPHome name." },
+        "user": { "name": "User", "description": "The user id to sign in as." }
+      }
+    },
+    "assign_tone": {
+      "name": "Send a tone",
+      "description": "Send a tone from the EchoLocal library to devices.",
+      "fields": {
+        "tone": { "name": "Tone", "description": "The tone's key." },
+        "device_id": { "name": "Devices", "description": "The devices to send it to." }
+      }
+    },
+    "unassign_tone": {
+      "name": "Remove a tone",
+      "description": "Remove a tone from devices. It stays in the library.",
+      "fields": {
+        "tone": { "name": "Tone", "description": "The tone's key." },
+        "device_id": { "name": "Devices", "description": "The devices to remove it from." }
+      }
+    },
+    "fetch": {
+      "name": "Download a file",
+      "description": "Download part of a release file for an EchoLocal device that cannot reach the internet.",
+      "fields": {
+        "url": { "name": "URL", "description": "The release file to download." },
+        "offset": { "name": "Offset", "description": "The first byte to return." },
+        "length": { "name": "Length", "description": "How many bytes to return." }
+      }
+    },
+    "ping": {
+      "name": "Ping",
+      "description": "Answers whether this integration speaks a device's protocol version.",
+      "fields": {
+        "protocol": { "name": "Protocol", "description": "The device's protocol version." }
+      }
+    },
+    "voices": {
+      "name": "Voices",
+      "description": "Applies a device's voice match changes and returns the household's voices.",
+      "fields": {
+        "changes": {
+          "name": "Changes",
+          "description": "JSON list of {\"save\": profile} and {\"remove\": id}, oldest first."
+        }
+      }
+    },
+    "music_queue": {
+      "name": "Music Assistant queue",
+      "description": "Returns the tracks after the one playing on a Music Assistant player.",
+      "fields": {
+        "player": { "name": "Player", "description": "A Music Assistant player entity, player ID, or a device's Sendspin client ID." },
+        "limit": { "name": "Limit", "description": "How many tracks to return." }
+      }
+    },
+    "music_favorite": {
+      "name": "Music Assistant favorite",
+      "description": "Returns whether the track playing on a Music Assistant player is a favorite, and adds or removes it.",
+      "fields": {
+        "player": { "name": "Player", "description": "A Music Assistant player entity, player ID, or a device's Sendspin client ID." },
+        "favorite": { "name": "Favorite", "description": "Add the track to favorites, or remove it. Leave out to only read." }
+      }
+    },
+    "music_play": {
+      "name": "Play from the Music Assistant queue",
+      "description": "Plays a track from a Music Assistant player's queue.",
+      "fields": {
+        "player": { "name": "Player", "description": "A Music Assistant player entity, player ID, or a device's Sendspin client ID." },
+        "queue_item_id": { "name": "Queue item", "description": "The track to play." }
+      }
+    },
+    "music_browse": {
+      "name": "Inside a Music Assistant item",
+      "description": "Returns an album's or playlist's tracks, or an artist's albums and tracks.",
+      "fields": {
+        "uri": { "name": "Item", "description": "The Music Assistant URI of the album, playlist or artist." },
+        "limit": { "name": "Limit", "description": "How many items to return." }
+      }
+    },
+    "music_library": {
+      "name": "Music Assistant library",
+      "description": "Returns the library's playlists, albums, artists, radio stations or tracks.",
+      "fields": {
+        "media_type": { "name": "Kind", "description": "Which part of the library to list." },
+        "limit": { "name": "Limit", "description": "How many items to return." }
+      }
+    },
+    "music_search": {
+      "name": "Search Music Assistant",
+      "description": "Returns artists, albums, tracks, playlists and radio stations matching a query.",
+      "fields": {
+        "query": { "name": "Query", "description": "What to search for." },
+        "limit": { "name": "Limit", "description": "How many items to return of each kind." }
+      }
+    },
+    "music_players": {
+      "name": "Music Assistant players",
+      "description": "Lists Music Assistant's players and marks the one that holds a device.",
+      "fields": {
+        "player": { "name": "Player", "description": "A device's Sendspin client ID." }
+      }
+    },
+    "music_recent": {
+      "name": "Recently played in Music Assistant",
+      "description": "Returns what Music Assistant played most recently.",
+      "fields": {
+        "player": { "name": "Player", "description": "Only what this player's queue played." },
+        "limit": { "name": "Limit", "description": "How many items to return." }
+      }
+    },
+    "music_recommendations": {
+      "name": "Music Assistant recommendations",
+      "description": "Returns Music Assistant's recommendations, grouped in folders.",
+      "fields": {
+        "limit": { "name": "Limit", "description": "How many items to return in each folder." }
+      }
+    },
+    "camera_webrtc": {
+      "name": "Camera WebRTC",
+      "description": "Opens a WebRTC session to a camera and returns the answer.",
+      "fields": {
+        "entity_id": { "name": "Camera", "description": "The camera to stream." },
+        "offer": { "name": "Offer", "description": "The device's SDP offer." }
+      }
+    },
+    "camera_webrtc_close": {
+      "name": "Close camera WebRTC",
+      "description": "Closes a WebRTC session opened with Camera WebRTC.",
+      "fields": {
+        "entity_id": { "name": "Camera", "description": "The camera that was streamed." },
+        "session": { "name": "Session", "description": "The session to close." }
+      }
+    },
+    "call_answer": {
+      "name": "Answer a dashboard call",
+      "description": "Sent by a device when it answers a call from a dashboard.",
+      "fields": {
+        "session": { "name": "Session", "description": "The call being answered." },
+        "sdp": { "name": "Answer", "description": "The device's WebRTC answer." }
+      }
+    },
+    "call_end": {
+      "name": "End a dashboard call",
+      "description": "Sent by a device when a call from a dashboard ends.",
+      "fields": {
+        "session": { "name": "Session", "description": "The call that ended." },
+        "reason": { "name": "Reason", "description": "Why the call ended." }
       }
     }
   }

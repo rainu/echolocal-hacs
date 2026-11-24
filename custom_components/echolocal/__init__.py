@@ -10,7 +10,21 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.loader import async_get_integration
 
-from . import entities, talk, wakewords
+from . import (
+    call,
+    dashboard,
+    entities,
+    fetch,
+    fleet,
+    music,
+    ping,
+    talk,
+    tones,
+    triggers,
+    voices,
+    wakewords,
+    webrtc,
+)
 from .const import (
     BUNDLE_FILE,
     CONF_SIDEBAR,
@@ -35,8 +49,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: EchoLocalEntry) -> bool:
         hass.data[DOMAIN] = True
         await _async_serve_frontend(hass, version)
         await wakewords.async_setup(hass)
+        await tones.async_setup(hass)
+        await triggers.async_setup(hass)
+        await fleet.async_setup(hass)
+        await voices.async_setup(hass)
         entities.async_setup(hass)
+        ping.async_setup(hass)
+        webrtc.async_setup(hass)
+        call.async_setup(hass)
+        dashboard.async_setup(hass)
+        fetch.async_setup(hass)
+        music.async_setup(hass)
         talk.async_setup(hass)
+
+    await dashboard.async_prune(hass)
 
     if entry.options.get(CONF_SIDEBAR, True):
         await _async_register_panel(hass, version)

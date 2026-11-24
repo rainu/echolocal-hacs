@@ -1,3 +1,242 @@
+assign_tone:
+  fields:
+    tone:
+      required: true
+      example: doorbell_chime
+      selector:
+        text:
+    device_id:
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            - integration: esphome
+              manufacturer: EchoLocal
+unassign_tone:
+  fields:
+    tone:
+      required: true
+      example: doorbell_chime
+      selector:
+        text:
+    device_id:
+      required: true
+      selector:
+        device:
+          multiple: true
+          filter:
+            - integration: esphome
+              manufacturer: EchoLocal
+dashboards:
+  fields:
+    node:
+      required: true
+      example: blueberry
+      selector:
+        text:
+dashboard_token:
+  fields:
+    node:
+      required: true
+      example: blueberry
+      selector:
+        text:
+    user:
+      required: true
+      selector:
+        text:
+fetch:
+  fields:
+    url:
+      required: true
+      example: https://github.com/ygelfand/echolocal/releases/download/1.0.0/manifest.json
+      selector:
+        text:
+    offset:
+      selector:
+        number:
+          min: 0
+          mode: box
+    length:
+      selector:
+        number:
+          min: 1
+          max: 40960
+          mode: box
+ping:
+  fields:
+    protocol:
+      required: true
+      example: 1
+      selector:
+        number:
+          min: 1
+          max: 1000
+          mode: box
+voices:
+  fields:
+    changes:
+      required: false
+      example: '[{"remove": "person.yuri"}]'
+      selector:
+        text:
+          multiline: true
+music_queue:
+  fields:
+    player:
+      required: true
+      example: "aabbccddeeff"
+      selector:
+        text:
+    limit:
+      example: 50
+      selector:
+        number:
+          min: 1
+          max: 200
+          mode: box
+music_favorite:
+  fields:
+    player:
+      required: true
+      example: "aabbccddeeff"
+      selector:
+        text:
+    favorite:
+      selector:
+        boolean:
+music_play:
+  fields:
+    player:
+      required: true
+      example: "aabbccddeeff"
+      selector:
+        text:
+    queue_item_id:
+      required: true
+      selector:
+        text:
+music_browse:
+  fields:
+    uri:
+      required: true
+      example: "spotify://album/1"
+      selector:
+        text:
+    limit:
+      example: 100
+      selector:
+        number:
+          min: 1
+          max: 500
+          mode: box
+music_library:
+  fields:
+    media_type:
+      required: true
+      example: "playlist"
+      selector:
+        select:
+          options:
+            - playlist
+            - album
+            - artist
+            - radio
+            - track
+    limit:
+      example: 100
+      selector:
+        number:
+          min: 1
+          max: 500
+          mode: box
+music_search:
+  fields:
+    query:
+      required: true
+      example: "eminem"
+      selector:
+        text:
+    limit:
+      example: 10
+      selector:
+        number:
+          min: 1
+          max: 50
+          mode: box
+music_players:
+  fields:
+    player:
+      example: "aabbccddeeff"
+      selector:
+        text:
+music_recent:
+  fields:
+    player:
+      example: "media_player.kitchen"
+      selector:
+        text:
+    limit:
+      example: 20
+      selector:
+        number:
+          min: 1
+          max: 100
+          mode: box
+music_recommendations:
+  fields:
+    limit:
+      example: 20
+      selector:
+        number:
+          min: 1
+          max: 100
+          mode: box
+camera_webrtc:
+  fields:
+    entity_id:
+      required: true
+      selector:
+        entity:
+          domain: camera
+    offer:
+      required: true
+      selector:
+        text:
+          multiline: true
+camera_webrtc_close:
+  fields:
+    entity_id:
+      required: true
+      selector:
+        entity:
+          domain: camera
+    session:
+      required: true
+      selector:
+        text:
+call_answer:
+  fields:
+    session:
+      required: true
+      selector:
+        text:
+    sdp:
+      required: true
+      selector:
+        text:
+          multiline: true
+call_end:
+  fields:
+    session:
+      required: true
+      selector:
+        text:
+    reason:
+      selector:
+        text:
+
 start_talk:
   name: Start Talk
   description: Start a voice conversation. Omitted or empty values independently use assistant 1 defaults, without changing settings.

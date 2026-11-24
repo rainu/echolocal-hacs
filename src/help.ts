@@ -13,14 +13,18 @@ const HELP: Record<string, string> = {
     "Evens out loud and quiet talkers so a whisper across the room and a shout beside it arrive at similar volume. Helps transcription, and costs a little dynamic range.",
   microphone_cancel_echo:
     "Subtracts what the speaker is playing from what the microphones hear, so the device can be interrupted while it is talking and does not answer its own reply.",
+  microphone_noise_reduction:
+    "Takes the steady part of the room — a fan, traffic, air conditioning — out of what the microphones heard. Try turning it on in a room with background noise.",
   microphone_sensitivity:
-    "How much louder than the room's own noise floor a sound has to be before the device treats it as somebody talking. Raise it in a noisy room to stop the device reacting to the room itself; lower it if quiet speech is missed.",
+    "How much louder than the room's background noise a sound has to be before the light ring and the on-screen listening animation react to it. Raise it if they react to the room itself; lower it if they miss quiet sounds.",
   room_level:
-    "How loud the room is right now, in decibels below full scale. Nothing to set — it is what the sensitivity is measured against, and watching it is how you pick a sensible one.",
+    "The loudest the room got since the last report, in decibels below full scale.",
   room_floor:
-    "The quietest the room has been recently, which is the baseline the device compares against. It drifts with the room, so a fridge switching on raises it rather than fooling the device.",
+    "The room's background noise, which the device learns as it listens. It follows the room, so a fridge switching on raises it.",
   mute_led_brightness:
     "How bright the red ring is while the microphones are cut. Dim is enough to see in a dark room without lighting it up.",
+  mute_sound:
+    "What the device plays when the microphones are cut or restored. Mute tones fall for muting and rise for unmuting, so the two are told apart without looking; None mutes silently.",
   stop_word_sensitivity:
     "How sure the device has to be before it takes an interruption as the word stop. Lower it if saying stop over a reply does not land.",
 
@@ -40,10 +44,25 @@ const HELP: Record<string, string> = {
     "Sends audio out of the jack instead of the speaker. The speaker goes quiet while this is on.",
   noise_layer:
     "Plays a generated sound the device makes itself — rain, a fan, a brook. Nothing is streamed and nothing is stored: it is synthesised as it plays, so it never loops or runs out. Two layers can overlap, so rain over a fan is one choice in each.",
-  media_on_turn:
-    "What happens to music when someone says the wake word. Ducking drops the volume and keeps playing, which resumes on the same note; stopping does not.",
   media_duck_level:
     "How far the volume drops while the device is listening or talking. Far enough that the microphones are not fighting the music, not so far that the room goes silent.",
+  cast_receiver: "Lets phones and browsers cast to the device.",
+  youtube_sponsorblock:
+    "SponsorBlock categories to skip in YouTube videos, separated by commas.",
+
+  // The screen
+  backlight: "How bright the screen is.",
+  screen_mode: "Sets the brightness from the room's light.",
+  drawer_edge: "Which edge of the screen the dock sits on.",
+  idle_after: "How long the screen waits with nobody using it before the idle screen comes up.",
+  poster_every: "How often the next photo comes up.",
+
+  // The camera
+  rtsp: "Serves the camera as an RTSP stream on the network.",
+  camera_keyframe: "Seconds between full frames.",
+  camera_banding: "Set to your mains frequency if lights flicker in the picture.",
+  bluetooth_speaker: "Lets phones pair with the device and play through it.",
+
   voice_resampling:
     "How the reply's audio is resampled to what the speaker wants. Better quality costs a little more work on a device that has four small cores.",
 
@@ -60,6 +79,10 @@ const HELP: Record<string, string> = {
     "How long to wait for Home Assistant's pipeline to answer. Generous is usually right — a slow answer beats a turn that dies just before it arrives.",
   wake_effect:
     "What the ring does at this point in a turn. Cosmetic, but it is how somebody knows the device heard them.",
+  thinking_effect:
+    "What the ring does while Home Assistant works on the answer. Default leaves it as the ring effect, played backwards.",
+  replying_effect:
+    "What the ring does while the answer plays. Default leaves it as the ring effect, played backwards.",
   wake_tone:
     "A short sound at this point in a turn. Some people want the confirmation; some find it grating.",
   reply_buffer:
@@ -82,6 +105,8 @@ const HELP: Record<string, string> = {
     "Plays a short sound, which is the quickest way to find out whether the speaker, the volume and the output route are all what you think they are.",
   remote_adb:
     "Opens Android's debugging port over the network. Off by default, and worth leaving off: it is an unauthenticated way onto the device for anything on the same network.",
+  verify_certificates:
+    "Checks the certificates of the servers the device talks to. Turn it off only for a Home Assistant with a self-signed certificate, and back on once it has one the device trusts.",
   vad_sensitivity:
     "How readily the device decides somebody has stopped talking. Tighter ends a turn sooner and can cut you off mid-sentence.",
 
@@ -118,6 +143,10 @@ const KINDS: Record<string, string> = {
   ring: "The twelve-segment light. None of it changes what the device does — it changes what somebody in the room can tell about it, which is why the muted and failed colours are worth setting.",
   playback:
     "The speaker: what comes out of it, how loud, and what happens to music when somebody talks to the device.",
+  screen:
+    "How the screen looks: brightness, theme, the clock, and what it shows when nobody is using it. Tap the screen on the card to open this.",
+  poster: "Photos from an Immich server. Fill in the server and API key, then pick albums or tags.",
+  camera: "The camera's picture and stream. Tap the picture for the live view.",
   assistant:
     "One wake word and the turn that follows it. A device can run more than one, each with its own word, sensitivity and timings, which is how one device answers to two names.",
   device:
